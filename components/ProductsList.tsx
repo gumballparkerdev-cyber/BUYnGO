@@ -1,54 +1,61 @@
-'use client'
-import { useEffect } from "react"
-import { clearItems, setPage, clearFilters } from "@/hooks/productsSlice"
-import { useSearchParams } from "next/navigation"
-import { useAppDispatch, useAppSelector } from "@/store/authStore"
-import { fetchProducts, fetchCategoryThunk } from "@/hooks/productsThunk"
-import ProductCard from "./ProductCard"
-import SortProducts from "./SortProducts"
-import Pagination from "./Pagination"
+"use client";
+
+import { useEffect } from "react";
+import { clearFilters } from "@/hooks/productsSlice";
+import { useSearchParams } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/store/authStore";
+import {
+  fetchProducts,
+  fetchCategoryThunk,
+} from "@/hooks/productsThunk";
+import ProductCard from "./ProductCard";
+import SortProducts from "./SortProducts";
+import Pagination from "./Pagination";
 
 export default function ProductList() {
-  const dispatch = useAppDispatch()
-  const searchParams = useSearchParams()
-  const category = searchParams.get("category")
-  const { items = [], loading, error, page, limit, total, sortBy, order } = useAppSelector((s) => s.products)
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category");
 
+  const { items = [], loading, error, page, limit, total, sortBy, order } =
+    useAppSelector((s) => s.products);
+
+  // 🔹 Fetch products whenever params change
   useEffect(() => {
-    dispatch(clearItems())
-    const skip = (page - 1) * limit
+    const skip = (page - 1) * limit;
+
     if (category) {
-      dispatch(fetchCategoryThunk({
+      dispatch(
+        fetchCategoryThunk({
           category,
           limit,
           skip,
           sortBy: sortBy ?? undefined,
           order: order ?? undefined,
-     }))
-
+        })
+      );
     } else {
-      dispatch(fetchProducts({
+      dispatch(
+        fetchProducts({
           limit,
           skip,
           sortBy: sortBy ?? undefined,
           order: order ?? undefined,
-     }))
-
+        })
+      );
     }
-  }, [category, dispatch, page, limit, sortBy, order])
+  }, [category, page, limit, sortBy, order, dispatch]);
 
-  const handlePageChange = (newPage: number) => {
-    dispatch(setPage(newPage))
-  }
-
+  // 🔹 Clear filters manually
   const handleClearFilters = () => {
-    dispatch(clearFilters())
-    dispatch(fetchProducts({ limit, skip: 0 }))
-  }
+    dispatch(clearFilters());
+    dispatch(fetchProducts({ limit, skip: 0 }));
+  };
 
-  if (loading) return <p className="text-center text-gray-500">Loading products...</p>
-  if (error) return <p className="text-center text-red-500">{error}</p>
-  if (!items || items.length === 0) return <p className="text-center text-gray-400">No products found</p>
+  // 🔹 UI states
+  if (loading) return <p className="text-center text-gray-500">Loading products...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
+  if (!items || items.length === 0) return <p className="text-center text-gray-400">No products found</p>;
 
   return (
     <>
@@ -72,8 +79,8 @@ export default function ProductList() {
         page={page}
         total={total}
         limit={limit}
-        onPageChange={handlePageChange}
+        onPageChange={(newPage) => dispatch({ type: "products/setPage", payload: newPage })}
       />
     </>
-  )
+  );
 }
