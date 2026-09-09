@@ -10,46 +10,15 @@ import SortProducts from "./SortProducts";
 import Pagination from "./Pagination";
 
 export default function ProductList() {
+  const { items, loading, error, page, limit, total } = useAppSelector((s) => s.products);
   const dispatch = useAppDispatch();
-  const searchParams = useSearchParams();
-  const category = searchParams.get("category");
-
-  const { items = [], loading, error, page, limit, total, sortBy, order } =
-    useAppSelector((s) => s.products);
-
-  // ✅ Fixed useEffect — only runs when category or page changes
-  useEffect(() => {
-    const skip = (page - 1) * limit;
-
-    if (category) {
-      dispatch(
-        fetchCategoryThunk({
-          category,
-          limit,
-          skip,
-          sortBy: sortBy ?? undefined,
-          order: order ?? undefined,
-        })
-      );
-    } else {
-      dispatch(
-        fetchProducts({
-          limit,
-          skip,
-          sortBy: sortBy ?? undefined,
-          order: order ?? undefined,
-        })
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, page]); // ✅ only re-run when these change
 
   const handleClearFilters = () => {
     dispatch(clearFilters());
     dispatch(fetchProducts({ limit, skip: 0 }));
   };
 
-  if (loading) return <p className="text-center text-gray-500">Loading products...</p>;
+  if (loading) return <p>Loading products...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (!items || items.length === 0) return <p className="text-center text-gray-400">No products found</p>;
 
@@ -57,10 +26,7 @@ export default function ProductList() {
     <>
       <div className="flex justify-between items-center m-4">
         <SortProducts />
-        <button
-          onClick={handleClearFilters}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-        >
+        <button onClick={handleClearFilters} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
           Clear Filters
         </button>
       </div>
@@ -80,3 +46,4 @@ export default function ProductList() {
     </>
   );
 }
+
