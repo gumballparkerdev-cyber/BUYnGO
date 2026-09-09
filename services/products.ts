@@ -29,3 +29,17 @@ export const searchProducts = async (query: string) => {
   const response = await axios.get(`${API_URL}/products/search?q=${query}`);
   return response.data;
 };
+
+// sort products (standalone)
+export const getSortedProducts = async (
+  sortBy: string,
+  order: string,
+  category?: string
+) => {
+  const url = category
+    ? `/api/products/category/${category}?sortBy=${sortBy}&order=${order}`
+    : `/api/products?sortBy=${sortBy}&order=${order}`;
+
+  const response = await axios.get(url);
+  return response.data;
+};
