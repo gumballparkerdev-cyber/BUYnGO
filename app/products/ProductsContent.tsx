@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "@/store/authStore";
+import ProductList from "@/components/ProductsList";
+
 
 import {
   fetchProducts,
@@ -57,38 +59,7 @@ const orderParam = order ?? undefined;
   // 🔹 Render products
   return (
     <div>
-      <h2>Products for {category || "all"}</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: "1rem",
-        }}
-      >
-        {items.map((p) => (
-          <div key={p.id} style={{ border: "1px solid #ddd", padding: "1rem" }}>
-            <h3>{p.title}</h3>
-            <img src={p.thumbnail} alt={p.title} width={150} />
-            <p>${p.price}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* 🔹 Pagination controls */}
-      <div style={{ marginTop: "2rem", textAlign: "center" }}>
-        <button disabled={page === 1} onClick={() => dispatch({ type: "products/setPage", payload: page - 1 })}>
-          Prev
-        </button>
-        <span style={{ margin: "0 1rem" }}>
-          Page {page} of {Math.ceil(total / limit)}
-        </span>
-        <button
-          disabled={page * limit >= total}
-          onClick={() => dispatch({ type: "products/setPage", payload: page + 1 })}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+      <ProductList />
+  </div>
   );
 }
