@@ -21,30 +21,31 @@ export default function ProductList() {
     useAppSelector((s) => s.products);
 
   // 🔹 Fetch products whenever params change
-  useEffect(() => {
-    const skip = (page - 1) * limit;
+ useEffect(() => {
+  const skip = (page - 1) * limit;
 
-    if (category) {
-      dispatch(
-        fetchCategoryThunk({
-          category,
-          limit,
-          skip,
-          sortBy: sortBy ?? undefined,
-          order: order ?? undefined,
-        })
-      );
-    } else {
-      dispatch(
-        fetchProducts({
-          limit,
-          skip,
-          sortBy: sortBy ?? undefined,
-          order: order ?? undefined,
-        })
-      );
-    }
-  }, [category, page, limit, sortBy, order, dispatch]);
+  if (category) {
+    dispatch(
+      fetchCategoryThunk({
+        category,
+        limit,
+        skip,
+        sortBy: sortBy ?? undefined,
+        order: order ?? undefined,
+      })
+    );
+  } else {
+    dispatch(
+      fetchProducts({
+        limit,
+        skip,
+        sortBy: sortBy ?? undefined,
+        order: order ?? undefined,
+      })
+    );
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [category, page]); // ✅ only re-run when these change
 
   // 🔹 Clear filters manually
   const handleClearFilters = () => {
