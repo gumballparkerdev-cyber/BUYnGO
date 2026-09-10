@@ -5,14 +5,15 @@ import { useAppDispatch, useAppSelector } from "@/store/authStore";
 import { fetchProductById } from "@/hooks/productsThunk";
 import ProductDetails from "@/components/ProductDetails";
 
-export default function ProductDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function ProductDetailsPage({ params }: { params: { id: string } }) {
+  const { id } = params
   const dispatch = useAppDispatch();
   const { selected, loading, error } = useAppSelector((state) => state.products);
 
-  useEffect(() => {
-    if (id) dispatch(fetchProductById(id)); // ✅ guard against undefined
-  }, [dispatch, id]);
+useEffect(() => {
+  if (id) dispatch(fetchProductById(id))
+}, [dispatch, id])
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
