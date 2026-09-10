@@ -1,11 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
-  console.log("🧩 Product ID received:", id);
+  const { id } = await context.params; // ✅ unwrap the Promise
 
   if (!id) {
     return NextResponse.json({ message: "Missing product ID" }, { status: 400 });
