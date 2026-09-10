@@ -32,7 +32,7 @@ function ProductDetails({ product }: { product: Product }) {
           <Image
             width={400}        // ✅ required
             height={400} 
-            src={product.images[1]}
+            src={product.images[0]}
             alt={product.title}
             className="w-full h-full object-contain rounded-lg"
           />
