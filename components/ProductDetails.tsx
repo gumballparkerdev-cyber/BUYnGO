@@ -28,6 +28,7 @@ function ProductDetails({ product }: { product: Product }) {
       <div className="flex flex-col sm:flex-row gap-6 items-start">
         {/* Thumbnail */}
         <div className="border-2 border-gray-300 rounded-lg p-4 w-60 h-80 flex items-center justify-center">
+          {product.images && product.images.length > 0 ? (
           <Image
             width={400}        // ✅ required
             height={400} 
@@ -35,6 +36,9 @@ function ProductDetails({ product }: { product: Product }) {
             alt={product.title}
             className="w-full h-full object-contain rounded-lg"
           />
+          ) : (
+             <p>No image available</p>
+          )}
         </div>
 
         {/* Text section */}

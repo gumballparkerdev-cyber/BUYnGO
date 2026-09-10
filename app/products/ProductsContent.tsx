@@ -34,16 +34,13 @@ const orderParam = order ?? undefined;
   // 🔹 Fetch logic based on query params
 useEffect(() => {
   const skip = (page - 1) * limit;
-
-  // ✅ Only fetch if items are empty OR category changed
-  if (items.length === 0) {
-    if (category) {
-      dispatch(fetchCategoryThunk({ category, limit, skip, sortBy: sortByParam , order: orderParam }));
-    } else {
-      dispatch(fetchProducts({ limit, skip, sortBy: sortByParam , order: orderParam }));
-    }
+  if (category) {
+    dispatch(fetchCategoryThunk({ category, limit, skip, sortBy: sortByParam, order: orderParam }));
+  } else {
+    dispatch(fetchProducts({ limit, skip, sortBy: sortByParam, order: orderParam }));
   }
 }, [category, page]);
+
 
   // 🔹 Loading & error states
   if (loading) return <p>Loading products...</p>;
