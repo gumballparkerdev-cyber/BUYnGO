@@ -21,13 +21,19 @@ export default function CartItem({ item }: CartItemProps) {
   return (
    <div className="flex items-center justify-between gap-4 border-b p-4">
   <div className="flex items-center gap-4">
-    <Image
-      height={400}
-      width={400}
-      src={item.images[0]}
-      alt={item.title}
-      className="h-20 w-20 rounded object-cover"
-    />
+    {item.images && item.images.length > 0 ? (
+      <Image
+        height={400}
+        width={400}
+        src={item.images[0]}
+        alt={item.title}
+        className="h-20 w-20 rounded object-cover"
+      />
+    ) : (
+      <div className="h-20 w-20 rounded bg-gray-200 flex items-center justify-center">
+        <p className="text-xs text-gray-500">No image</p>
+      </div>
+    )}
 
     <div>
       <h2 className="font-semibold">{item.title}</h2>
