@@ -45,7 +45,6 @@ useEffect(() => {
 }, [search, category, page]);
 
 
-
   // 🔹 Loading & error states
   if (loading) return <p>Loading products...</p>;
   if (error) return <p>Failed to load products: {error}</p>;

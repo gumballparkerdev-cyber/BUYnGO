@@ -18,19 +18,21 @@ export const fetchProducts = createAsyncThunk<
 // fetch single product by id
 export const fetchProductById = createAsyncThunk<Product, string>(
   "products/fetchProductById",
-  async (id) => {
+  async (id: string) => {
     const response = await getProductById(id)
     return response            // dummyjson returns a single product object
   }
 )
 
 // search products
-export const searchProductsThunk = createAsyncThunk<Product[], string>(
-  'products/searchProducts',
-
+export const searchProductsThunk = createAsyncThunk<
+  { products: Product[]; total: number },
+  string
+>(
+  "products/searchProducts",
   async (query) => {
     const response = await searchProducts(query)
-    return response.products
+    return { products: response.products, total: response.total }
   }
 )
 

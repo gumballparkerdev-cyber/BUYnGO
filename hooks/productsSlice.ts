@@ -75,7 +75,8 @@ const productSlice = createSlice({
       })
       .addCase(searchProductsThunk.fulfilled, (state, action) => {
         state.loading = false
-        state.items = action.payload // ✅ replace items with search results
+        state.items = action.payload.products
+        state.total = action.payload.total
       })
       .addCase(searchProductsThunk.rejected, (state) => {
         state.loading = false
