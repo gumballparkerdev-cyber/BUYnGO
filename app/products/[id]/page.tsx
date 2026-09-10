@@ -1,27 +1,22 @@
-"use client"
-import { use } from "react"
-import { useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "@/store/authStore"
-import { fetchProductById } from "@/hooks/productsThunk"
-import ProductDetails from "@/components/ProductDetails"
-
-
+"use client";
+import { use } from "react";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/authStore";
+import { fetchProductById } from "@/hooks/productsThunk";
+import ProductDetails from "@/components/ProductDetails";
 
 export default function ProductDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params) // ✅ unwrap the promise
-  const dispatch = useAppDispatch()
-  const { selected, loading, error } = useAppSelector((state) => state.products)
-
+  const { id } = use(params);
+  const dispatch = useAppDispatch();
+  const { selected, loading, error } = useAppSelector((state) => state.products);
 
   useEffect(() => {
-    dispatch(fetchProductById(id))
-  }, [dispatch, id])
+    if (id) dispatch(fetchProductById(id)); // ✅ guard against undefined
+  }, [dispatch, id]);
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+  if (!selected) return <p>No product found</p>;
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>{error}</p>
-  if (!selected) return <p>No product found</p>
-
-
-  return <ProductDetails product={selected} />
+  return <ProductDetails product={selected} />;
 }

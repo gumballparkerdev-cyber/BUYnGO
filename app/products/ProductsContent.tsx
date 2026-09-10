@@ -34,12 +34,16 @@ const orderParam = order ?? undefined;
   // 🔹 Fetch logic based on query params
 useEffect(() => {
   const skip = (page - 1) * limit;
-  if (category) {
+
+  if (search) {
+    dispatch(searchProductsThunk(search));
+  } else if (category) {
     dispatch(fetchCategoryThunk({ category, limit, skip, sortBy: sortByParam, order: orderParam }));
   } else {
     dispatch(fetchProducts({ limit, skip, sortBy: sortByParam, order: orderParam }));
   }
-}, [category, page]);
+}, [search, category, page]);
+
 
 
   // 🔹 Loading & error states
